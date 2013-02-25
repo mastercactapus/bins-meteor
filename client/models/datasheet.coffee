@@ -28,6 +28,6 @@ class Datasheet extends EditableModel
     out["attributes"] = [
       {label: "Description", name: "description", textarea:true, value: @get("description")}
       {label: "Search Tags", name: "tags", type:"text", placeholder: "Comma, separated, list...", value: @get("tags").join(", ")}
-      {label: "Datasheet", fileupload:true, name: "binData"}
+      {label: "Datasheet", type:"file", name: "dsId"}
     ]
     out
