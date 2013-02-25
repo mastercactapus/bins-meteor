@@ -57,7 +57,7 @@ class ClientUpload
       @saturated = true
       return false
     @sendFlag = true
-    @finish() unless @reader.read (data) =>
+    do_next = @reader.read (data) =>
       @progressCB @toJSON()
       Meteor.call "file_save_chunk", @id, @chunk, data, (err,retr) =>
         @chunk += 1
@@ -65,6 +65,7 @@ class ClientUpload
         if @saturated
           @saturated = false
           @sendChunk()
+    @finish() unless do_next
   finish: ->
     Meteor.clearTimeout @timeout
     hash = @reader.finish()
