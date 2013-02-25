@@ -7,8 +7,11 @@ class GridFS
     id = @files.insert {filename, length, FILE_CHUNK_SIZE, uploadDate: new Date}
 
   saveChunk: (files_id, n, data) ->
-    @chunks.insert {files_id, n, data}
-    
+    return false if data % FILE_CHUNK_SIZE != 0
+    chunks = ChunkIt data, FILE_CHUNK_SIZE
+    @chunks.insert {files_id, n: n++, chunk} for chunk in chunks
+    true
+
   finalize: (files_id) ->
     numChunks = Math.ceil(file.length / file.chunkSize)
     chunks = @chunks.find({files_id},{data:1})
