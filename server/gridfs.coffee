@@ -3,9 +3,8 @@ class GridFS
     @files  = new Meteor.Collection "#{name}.files"
     @chunks = new Meteor.Collection "#{name}.chunks"
 
-  createFile: (filename, length, chunkSize = FILE_CHUNK_SIZE) ->
-    id = @files.insert {filename, length, chunkSize, uploadDate: new Date}
-    @uploads
+  createFile: (filename, length) ->
+    id = @files.insert {filename, length, FILE_CHUNK_SIZE, uploadDate: new Date}
 
   saveChunk: (files_id, n, data) ->
     @chunks.insert {files_id, n, data}
