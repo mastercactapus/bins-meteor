@@ -1,0 +1,15 @@
+
+<template name="datasheet">
+  <div class="datasheet text-center well well-small">
+    {{>objectHeading}}
+    <p>{{description}}</p>
+    <p>
+      <ul class="tags">
+        <i class="icon-tags"></i>
+        {{#each tags}}
+        <li><a href="#search/{{.}}" title="Search for items tagged: {{.}}">{{.}}</a></li>
+        {{/each}}
+      </ul>
+    </p>
+    </div>
+</template>

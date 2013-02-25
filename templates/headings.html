@@ -1,0 +1,56 @@
+<template name="objectBadge">
+  <span class="badge badge-{{type}}"><i class="icon-{{icon}}"></i> {{text}}</span>
+</template>
+<template name="objectActions">
+  <div class="btn-group">
+    {{#each .}}
+    <button type="button" data-action="{{action}}" class="btn btn-mini{{#if dangerous}} btn-danger{{/if}}{{#if safe}} btn-success{{/if}}" title="{{title}}"><i class="icon-{{icon}}"></i></button>
+    {{/each}}
+  </div>
+</template>
+
+<template name="objectHeading">
+  <div class="obj-heading">
+    {{#with heading}}
+      {{>objectActions actions}}
+      {{>objectBadge label}}
+    {{/with}}
+    <p>
+      <b>{{title}}</b>
+    </p>
+  </div>
+</template>
+
+<template name="editHeading">
+  <div class="obj-heading">
+      {{>objectActions editActions}}
+      {{>objectBadge heading.badge}}
+    <p>
+      <input type="text" class="input-xlarge" value="{{title}}" placeholder="Title/Label">
+    </p>
+  </div>
+</template>
+
+<template name="editGeneric">
+  <div class="edit well well-small text-center">
+    {{>editHeading}}
+    <form class="form-horizontal text-left">
+      {{#each attributes}}
+      <div class="control-group">
+        <div class="control-label">{{label}}</div>
+        <div class="controls">
+          {{#if type}}
+            <input name="{{name}}" type="{{type}}" value="{{value}}" placeholder="{{placeholder}}" class="input-block-level">
+          {{/if}}
+          {{#if textarea}}
+            <textarea name="{{name}}" class="input-block-level" rows="4" placeholder="{{placeholder}}">{{value}}</textarea>
+          {{/if}}
+          {{#if fileupload}}
+            {{>fileUpload}}
+          {{/if}}
+        </div>
+      </div>
+      {{/each}}
+    </form>
+  </div>
+</template>
