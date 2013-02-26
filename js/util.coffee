@@ -7,7 +7,9 @@ BytesToString = (bytes) ->
   bytes.toFixed( suffix ? 2 : 0 ) + labels[suffix]
 
 ChunkIt = (data, size) ->
-  return data unless data > size
-  chunks = Math.ceil(data/size)
-  chunks[n] = data[(n*size)...size] for n in [0...chunks]
+  return data unless data.length > size
+  chunk_count = Math.ceil(data.length/size)
+  console.log "count", chunk_count
+  chunks = []
+  chunks[n] = data[(n*size)...size] for n in [0...chunk_count]
   chunks
