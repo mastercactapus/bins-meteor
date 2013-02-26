@@ -4,7 +4,7 @@ BytesToString = (bytes) ->
   while bytes > 999
     suffix += 1
     bytes /= 1024
-  bytes.toFixed( suffix ? 2 : 0 ) + labels[suffix]
+  bytes.toFixed( suffix ? 2 : 0 ) + " " + labels[suffix]
 
 ChunkIt = (data, size) ->
   return data unless data.length > size
