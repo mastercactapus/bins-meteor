@@ -3,7 +3,6 @@ class UploadManager
     @uploads = []
   addStart: (file,cb) ->
     up = new ClientUpload file, (finish) ->
-      console.log finish
     @uploads.push up
     up.start cb
   domTrigger: (event, model) =>
@@ -12,7 +11,6 @@ class UploadManager
       file = target.files[0]
       name = target.name
       @addStart file, (id) =>
-        console.log "file created"
         $(target).attr "data-file-id", id
 
 class FileStreamReader
@@ -29,7 +27,6 @@ class FileStreamReader
     end = Math.min(@file.size, @pos + FILE_CHUNK_SIZE)
     slice = @file.slice(@pos,end)
     @pos = end
-    console.log(@pos)
     reader = new FileReader
     reader.onload = (frEvent) =>
       data = frEvent.target.result
@@ -59,7 +56,6 @@ class ClientUpload
     throw "Already in progress or finished" if @inProgress
     @inProgress = true
     Meteor.call "file_create", @name, @reader.size(), (err,id) =>
-      console.log "created"
       throw "Did not receive file id" unless id
       @id = id
       @queueTransmit()
@@ -72,10 +68,8 @@ class ClientUpload
   queueTransmit: ->
     Meteor.clearTimeout @timeout
     wait = @calcWaitTime()
-    console.log wait
     @timeout = Meteor.setTimeout @sendChunk, (if wait > 0 then wait else 1)
   sendChunk: =>
-    console.log "sendChunk"
     # If transmitting, then set the timeout flag and return
     if @transmitFlag
       @timeoutFlag = true

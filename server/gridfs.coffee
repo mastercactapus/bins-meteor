@@ -4,25 +4,20 @@ class GridFS
     @chunks = new Meteor.Collection "#{name}.chunks"
 
   createFile: (filename, length) =>
-    console.log "create"
     id = @files.insert {filename:filename, length:length, chunkSize: FILE_CHUNK_SIZE, uploadDate: new Date}
     id
 
   saveChunk: (files_id, n, data) =>
-    console.log "chunk"
     @chunks.insert {files_id:files_id, n:n, data:data}
     true
 
   finalize: (files_id) =>
     file = @files.findOne {_id: files_id}
     throw "file not found" unless file
-    console.log file
     numChunks = Math.ceil(file.length / file.chunkSize)
     chunks = @chunks.find {files_id: files_id},
       fields: {data:1}
       sort: {n:1}
-    console.log chunks.count()
-    console.log( numChunks)
     return false unless chunks.count() == numChunks
     md5 = CryptoJS.algo.MD5.create()
     chunks.forEach (chunk) ->
