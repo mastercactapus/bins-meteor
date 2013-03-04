@@ -4,18 +4,104 @@
     </title>
 </head>
 <body>
-      {{>menu}}
-    <div id="mainApp" style="width:50em">
+  <div class="mainView">
+    <div class="row-fluid">
+        <div id="searchHeader">
+          {{>searchHeader}}
+        </div>
+      </div>
+    <div class="row-fluid">
+      <div id="searchView" class="span3">
+        <ul class="nav nav-pills nav-stacked" id="searchResults">
+        </ul>
+      </div>
+      <div id="infoView" class="span3"></div>
+      <div id="resultView" class="span6 well"></div>
     </div>
+  </div>
 </body>
 
+<template name="searchHeader">
+  <div class="row-fluid">
 
-
-
-<template name="searchItem">
-  <div class="search well well-small">
-    <a href="" class="view btn btn-mini">View</a>
-    <p>{{title}}</p>
+    <input class="span3" type="text" style="margin:0" id="searchField" placeholder="Search componnents..">
+  <div class="btn-group">
+    <button class="btn" title="Add new component" type="button">+ <i class="icon-cogs"></i></button>
+    <button class="btn" title="Manage component database" type="button">Database Options</button>
+  </div>
   </div>
 </template>
 
+<template name="searchItem">
+    <li>
+      <a class="pull-right" title="Delete this component" href="#components/{{_id}}/delete"><i class="icon-trash"></i></a>
+      <a title="Select component" href="#components/{{_id}}">
+        {{title}}
+        <p class="muted">{{>typeSubtype}}</p>
+      </a>
+    </li>
+</template>
+
+<template name="uploadDialog">
+<input type="text" id="uploadTitle" class="input-block-level" placeholder="{{placeholder}}">
+<input type="file" id="uploadFile">
+</template>
+
+<template name="typeSubtype">
+{{type}}{{#if subtype}}: {{subtype}}{{/if}}
+</template>
+
+<template name="componentInfo">
+  <div class="text-center">
+    <h4>{{title}}</h4>
+    <h6 class="muted">
+      {{>typeSubtype}}
+    </h6>
+  </div>
+  <hr>
+  <div>
+    <strong>Images: <a class="btn btn-mini pull-right" title="Upload new image" href="#components/{{_id}}/uploadImage"><i class="icon-upload-alt"></i></a></strong>
+    {{#if images}}
+    <ul class="unstyled">
+      {{#each images}}
+      <li>
+        <a title="View Image" href="#viewImage/{{id}}">{{label}}</a>
+        <a title="Download Image" href="#downloadFile/{{id}}"><i class="icon-download"></i></a>
+        <a title="Delete Image" href="#deleteFile/{{id}}"><i class="icon-trash"></i></a>
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p class="muted">There are no images available for this component.</p>
+    {{/if}}
+  </div>
+  <div>
+    <strong>Datasheets: <a class="btn btn-mini pull-right" title="Upload new datasheet" href="#components/{{_id}}/uploadDatasheet"><i class="icon-upload-alt"></i></a></strong>
+    {{#if datasheets}}
+    <ul class="unstyled">
+      {{#each datasheets}}
+      <li>
+        <a title="View Image" href="#viewDatasheet/{{id}}">{{label}}</a>
+        <a title="Download Image" href="#downloadFile/{{id}}"><i class="icon-download"></i></a>
+        <a title="Delete Image" href="#deleteFile/{{id}}"><i class="icon-trash"></i></a>
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}
+    <p class="muted">There are no datasheets available for this component.</p>
+    {{/if}}
+  </div>
+  <div>
+    <strong>Specifications:</strong>
+    <dl class="dl-horizontal">
+      {{#each specs}}
+      <dt>{{label}}</dt>
+      <dd>{{value}}</dd>
+      {{/each}}
+      <dt>Resistance</dt>
+      <dd>120ohm</dd>
+      <dt>Color</dt>
+      <dd>Tan</dd>
+    </dl>
+  </div>
+</template>
