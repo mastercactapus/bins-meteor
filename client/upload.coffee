@@ -1,17 +1,18 @@
 class UploadManager
   constructor: ->
     @uploads = []
-  addStart: (file,cb) ->
-    up = new ClientUpload file, (finish) ->
+  addStart: (file,cb) =>
+    up = new ClientUpload file
     @uploads.push up
     up.start cb
-  domTrigger: (event, model) =>
+  domTrigger: (event, ref) =>
+    console.log arguments
     target = event.target
     if target.files.length > 0
       file = target.files[0]
       name = target.name
       @addStart file, (id) =>
-        $(target).attr "data-file-id", id
+        ref.data.model.set name, id
 
 class FileStreamReader
   constructor: (file) ->
@@ -52,14 +53,14 @@ class ClientUpload
 
     @inProgress = false
   # start the transfer, cb will be called with the new file id if provided
-  start: (cb) ->
+  start: (cb) =>
     throw "Already in progress or finished" if @inProgress
     @inProgress = true
     Meteor.call "file_create", @name, @reader.size(), (err,id) =>
       throw "Did not receive file id" unless id
       @id = id
       @queueTransmit()
-      if cb then cb id
+      if cb then cb(id)
   speedLimit: (KiB_sec) ->
     @bps = KiB_sec * 1024
     @sendChunk()
