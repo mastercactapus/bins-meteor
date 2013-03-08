@@ -4,27 +4,27 @@ Components = new ComponentCollection
 Datasheets = new DatasheetCollection
 Cabinets = new CabinetCollection
 
-
-Test = new Meteor.Collection "testdb"
-
 if Meteor.isClient
   Router = new BinsRouter
   Uploads = new UploadManager
+  Search = new SearchInterface Components, "#searchResults"
+  Template.searchHeader.events
+    "change, keyup input#searchField": (event)-> results = Search.updateQuery $(event.currentTarget).val()
   Meteor.startup ->
-    Template.editGeneric.events
-      "change input[type=file]": Uploads.domTrigger
-    Router.on "route:new_datasheet", (actions) ->
-      $("#mainApp").empty().append Meteor.render -> Template.editGeneric (new Datasheet).editJSON()
-    Router.on "route:new_cabinet", (actions) ->
-      $("#mainApp").empty().append Meteor.render -> Template.editGeneric (new Cabinet).editJSON()
-    Router.on "route:new_component", (actions) ->
-      $("#mainApp").empty().append Meteor.render -> Template.editGeneric (new Component).editJSON()
+    Meteor.subscribe "components"
+    Search.updateQuery()
 
     Backbone.history.start()
 
 if Meteor.isServer
   FileGrid = new GridFS "file_grid"
   Meteor.startup ->
+    # Components.insert title:"555 Timer",tags:["555","timer","ic"]
+    # Components.insert title:"Atmel ATTiny84",tags:["atmel","attiny84","tiny84", "84", "microcontroller"]
+    # Components.insert title:"LED Mount", tags:["led", "mount", "holder", "mounting", "chrome"]
+    # Components.insert title:"Resistor: 220ohm", tags:["resistor","220ohm", "220"]
+  Meteor.publish "components", ->
+      Components.find()
     #FileGrid.ensureIndex( { files_id: 1, n: 1 }, { unique: true } );
     Meteor.methods
       "file_create": (filename, length) ->
