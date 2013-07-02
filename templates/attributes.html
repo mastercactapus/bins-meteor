@@ -1,0 +1,39 @@
+<template name="attr-filelist">
+  <strong class="attrLabel">
+    {{fileLabel}}s:
+    <a class="btn btn-mini pull-right" title="Upload new {{fileLabel}}" href="#components/{{_id}}/upload?type={{fileLabel}}"><i class="icon-upload-alt"></i></a>
+  </strong>
+  {{#if files}}
+  <ul class="unstyled">
+    {{#each files}}
+    <li>
+      <a title="View {{fileLabel}}" href="#components/{{../../../_id}}/files/{{fileLabel}}/{{files_id}}/view">{{label}}</a>
+      <a title="Download {{fileLabel}}" href="#components/{{../../../_id}}/files/{{fileLabel}}/{{files_id}}/download"><i class="icon-download"></i></a>
+      <a title="Delete {{fileLabel}}" href="#components/{{../../../_id}}/files/{{fileLabel}}/{{files_id}}/delete"><i class="icon-trash"></i></a>
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}
+  <p class="muted">There are no <span style="text-transform:lowercase">{{fileLabel}}s</span> available for this component.</p>
+  {{/if}}
+</template>
+<template name="attr-props">
+  <strong class="attrLabel">{{propLabel}}:</strong>
+  <dl class="dl-horizontal">
+    {{#each props}}
+    <dt>{{label}}</dt>
+    <dd>{{value}}</dd>
+    {{/each}}
+  </dl>
+</template>
+
+<template name="attr-select">
+  <div class="componentAttr">
+    {{#if fileLabel}}
+      {{>attr-filelist}}
+    {{/if}}
+    {{#if propLabel}}
+      {{>attr-props}}
+    {{/if}}
+  </div>
+</template>

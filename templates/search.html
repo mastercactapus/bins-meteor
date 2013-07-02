@@ -1,0 +1,21 @@
+
+<template name="searchHeader">
+  <div class="row-fluid">
+
+    <input class="span3" type="text" style="margin:0" id="searchField" placeholder="Search components..">
+  <div class="btn-group">
+    <button class="btn" id="addNewComponent" title="Add new component" type="button">+ <i class="icon-cogs"></i></button>
+    <button class="btn" title="Manage component database" type="button">Database Options</button>
+  </div>
+  </div>
+</template>
+
+<template name="searchItem">
+    <li>
+      <a class="pull-right" title="Delete this component" href="#components/{{_id}}/delete"><i class="icon-trash"></i></a>
+      <a title="Select component" href="#components/{{_id}}">
+        {{title}}
+        <p class="muted">{{type}}{{#if subType}}: {{subType}}{{/if}}</p>
+      </a>
+    </li>
+</template>

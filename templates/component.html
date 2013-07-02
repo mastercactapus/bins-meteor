@@ -1,0 +1,12 @@
+<template name="componentInfo">
+  <div class="text-center">
+    <h4>{{title}}</h4>
+    <h6 class="muted">
+      {{type}}{{#if subtype}}: {{subtype}}{{/if}}
+    </h6>
+  </div>
+  <hr>
+  {{#each attrs}}
+    {{>attr-select}}
+  {{/each}}
+</template>

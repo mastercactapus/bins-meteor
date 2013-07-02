@@ -1,0 +1,31 @@
+<template name="addEditComponent">
+  <div class="lightbox">
+    <div class="lightbox-header">
+      <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+    </div>
+    <div class="lightbox-content">
+      <input type="text" name="title" placeholder="Component title/label...">
+      <label>
+        Type:
+        <input type="text" name="type" placeholder="Type (e.g. IC, LED)" list="componentTypes">
+      </label>
+      <label>
+        Subtype:
+        <input type="text" name="subtype" placeholder="Subtype (e.g. 555 timer, 3mm)" list="componentSubtypes">
+      </label>
+
+      <datalist id="componentTypes">
+        {{#each componentTypes}}
+        <option> {{.}}
+        {{/each}}
+      </datalist>
+      <datalist id="componentSubtypes">
+        {{#each componentSubtypes}}
+        <option> {{.}}
+        {{/each}}
+      </datalist>
+
+      <button type="button" class="btn">Save</button>
+    </div>
+  </div>
+</template>
