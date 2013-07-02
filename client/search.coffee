@@ -10,6 +10,5 @@ class SearchInterface
       sort: title:1
   updateQuery: (val="") =>
     results =  @getResults(val)
-    console.log results.count()
     doms = Meteor.renderList results, Template.searchItem
     $(@domNode).empty().append doms

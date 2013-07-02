@@ -2,15 +2,18 @@ class GridFS
   constructor: (name) ->
     @files  = new Meteor.Collection "#{name}.files"
     @chunks = new Meteor.Collection "#{name}.chunks"
-
-  createFile: (filename, length) =>
-    id = @files.insert {filename:filename, length:length, chunkSize: FILE_CHUNK_SIZE, uploadDate: new Date}
+  createFile: (filename, length, meta={}) =>
+    id = @files.insert {filename:filename, metadata:meta, length:length, chunkSize: FILE_CHUNK_SIZE, uploadDate: new Date}
     id
-
-  saveChunk: (files_id, n, data) =>
-    @chunks.insert {files_id:files_id, n:n, data:data}
+  setChunk: (files_id, n, data) =>
+    @chunks.insert {files_id, n, data}
     true
-
+  deleteFile: (files_id) =>
+    @chunks.remove {files_id}
+    @files.remove {_id: files_id}
+    true
+  getChunk: (files_id, n) =>
+    @chunks.findOne({files_id, n},{fields:{data:1}}).fetch()[0].data
   finalize: (files_id) =>
     file = @files.findOne {_id: files_id}
     throw "file not found" unless file

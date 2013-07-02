@@ -4,7 +4,8 @@ class BinsRouter extends Backbone.Router
     "components/:id/uploadImage"  : "uploadImage"
     "components/:id/uploadDatasheet"  : "uploadDatasheet"
     "components/:id/delete"  : "deleteComponent"
-
+    "components/:id/files/:type/:index": "blank"
+  blank: ->
   uploadFile: (placeholder,cb) ->
     bootbox.confirm Template.uploadDialog({placeholder:placeholder}), (result)->
       if result is yes
@@ -25,23 +26,23 @@ class BinsRouter extends Backbone.Router
     @uploadFile "Image label/name (e.g. pinout)", (res,file,label) ->
       if res is yes
         Uploads.addStart file, (id) ->
-          Components.update {_id}, {$push:{images:{label, id}}}    
+          ComponentDB.update {_id}, {$push:{images:{label, id}}}    
   uploadDatasheet: (_id) ->
     @navigate "components/" + _id, {trigger:false,replace:true}
     @uploadFile "Datasheet label/name (e.g. sumary, full)", (res,file,label) ->
       if res is yes
         Uploads.addStart file, (id) ->
-          Components.update {_id}, {$push:{datasheets:{label, id}}} 
+          ComponentDB.update {_id}, {$push:{datasheets:{label, id}}} 
   viewComponent: (_id) ->
     $("#infoView").empty().append Meteor.render ->
-      Template.componentInfo Components.find({_id}).fetch()[0]
+      Template.componentInfo ComponentDB.find({_id}).fetch()[0]
   deleteComponent: (_id) ->
-    res = Components.find {_id}
+    res = ComponentDB.find {_id}
     if res.count() > 0
       component = res.fetch()[0]
       bootbox.confirm "Delete component: \"#{component.title}\"?", (result) =>
         if result is yes
-          Components.remove {_id} if result
+          ComponentDB.remove {_id} if result
           @navigate "", {trigger:true,replace:true}
         else
           @navigate "components/" + _id, {trigger:true,replace:true}
